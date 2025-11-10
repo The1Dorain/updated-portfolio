@@ -7,6 +7,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Home from './components/home.jsx';
 import Register from './components/register.jsx';
 import Login from './components/login.jsx';
+import ProjectList from './components/project-list.jsx';
+import ProjectDetails from './components/project-details.jsx';
 
 function App() {
 
@@ -77,6 +79,8 @@ function App() {
           <Route path='/' element={<Home />} />
           <Route path="/register" element={<Register setUser={setUser} />} />
           <Route path="/login" element={<Login setUser={setUser} />} />
+          <Route path='/projects' element={<ProjectList />} />
+          <Route path='/project-details/:id?' element={<ProjectDetails />} />
         </Routes>
       </Router>
     </>
