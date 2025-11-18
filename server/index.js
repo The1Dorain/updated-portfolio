@@ -4,9 +4,9 @@ import mongoose from "mongoose";
 import dotenv from "dotenv/config";
 
 // insert missed code here!
-
-// Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI);
+path =
+  // Connect to MongoDB
+  mongoose.connect(process.env.MONGODB_URI);
 const connection = mongoose.connection;
 connection.on(
   "error",
