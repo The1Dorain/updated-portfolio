@@ -3,10 +3,14 @@ import morgan from "morgan";
 import mongoose from "mongoose";
 import dotenv from "dotenv/config";
 
-// insert missed code here!
-path =
-  // Connect to MongoDB
-  mongoose.connect(process.env.MONGODB_URI);
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Connect to MongoDB
+mongoose.connect(process.env.MONGODB_URI);
 const connection = mongoose.connection;
 connection.on(
   "error",
