@@ -38,10 +38,10 @@ app.use("/api/data", (req, res) => {
   res.json({ message: "Hello from the API! Again" });
 });
 
-app.use(express.static(path.join(__dirname, "../client")));
+app.use(express.static(path.join(__dirname, "../client/dist")));
 
 app.get(/^(?!\/api).*/, (req, res) => {
-  res.sendFile(path.join(__dirname, "../client", "index.html"));
+  res.sendFile(path.join(__dirname, "../client/dist", "index.html"));
 });
 
 app.listen(3000);

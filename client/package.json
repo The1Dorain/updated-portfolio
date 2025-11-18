@@ -5,17 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm --prefix client run build",
+    "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "start": "npm-run-all --parallel start:client start:server",
-    "start:server": "npm --prefix server run dev",
-    "start:client": "npm --prefix client run dev",
-    "e2e": "cypress open"
-  },
-  "devDependencies": {
-    "@babel/preset-env": "7.28.5",
-    "@babel/preset-react": "7.28.5",
-    "@testing-library/jest-dom": "6.9.1"
+    "preview": "vite preview"
   }
 }
