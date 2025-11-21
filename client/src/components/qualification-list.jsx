@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const ContactList = () => {
-  const [contacts, setContacts] = useState([]);
+const QualificationList = () => {
+  const [qualifications, setQualifications] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchContacts = async () => {
+    const fetchQualifications = async () => {
       try {
         const token = localStorage.getItem("token");
 
@@ -15,7 +15,7 @@ const ContactList = () => {
           return;
         }
 
-        const response = await fetch("/api/contacts", {
+        const response = await fetch("/api/qualifications", {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
@@ -27,15 +27,15 @@ const ContactList = () => {
         }
 
         const data = await response.json();
-        setContacts(data);
+        setQualifications(data);
       } catch (error) {
-        console.error(`Error fetching contacts: ${error.message}`);
+        console.error(`Error fetching qualifications: ${error.message}`);
       }
     };
-    fetchContacts();
+    fetchQualifications();
   }, []);
 
-  const handleDelete = async (contactId) => {
+  const handleDelete = async (qualificationId) => {
     const token = localStorage.getItem("token");
 
     if (!token) {
@@ -45,7 +45,7 @@ const ContactList = () => {
     }
 
     try {
-      const response = await fetch(`/api/contacts/${contactId}`, {
+      const response = await fetch(`/api/qualifications/${qualificationId}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -53,55 +53,63 @@ const ContactList = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to delete contact");
+        throw new Error("Failed to delete qualification");
       }
 
-      setContacts((prevContacts) =>
-        prevContacts.filter((contact) => contact._id !== contactId)
+      setQualifications((prevQualifications) =>
+        prevQualifications.filter(
+          (qualification) => qualification._id !== qualificationId
+        )
       );
     } catch (error) {
-      console.error(`Error deleting contact: ${error.message}`);
+      console.error(`Error deleting qualification: ${error.message}`);
     }
   };
 
   return (
     <div className="container mt4">
-      <h1 className="text-center">Contacts</h1>
+      <h1 className="text-center">Qualifications</h1>
       <button
         className="btn btn-primary mb-3"
-        onClick={() => navigate("/contact-details")}
+        onClick={() => navigate("/qualification-details")}
       >
-        Create New Contact
+        Create New Qualification
       </button>
 
-      {contacts.length > 0 ? (
+      {qualifications.length > 0 ? (
         <>
           <table className="table table-striped">
             <thead>
               <tr>
+                <th>Title</th>
+                <th>First Name</th>
+                <th>Last Name</th>
                 <th>Email</th>
-                <th>Phone</th>
-                <th>Message</th>
+                <th>Completion</th>
+                <th>Description</th>
               </tr>
             </thead>
             <tbody>
-              {contacts.map((contact) => (
-                <tr key={contact._id}>
-                  <td>{contact.email}</td>
-                  <td>{contact.phone}</td>
-                  <td>{contact.message}</td>
+              {qualifications.map((qualification) => (
+                <tr key={qualification._id}>
+                  <td>{qualification.title}</td>
+                  <td>{qualification.firstName}</td>
+                  <td>{qualification.lastName}</td>
+                  <td>{qualification.email}</td>
+                  <td>{qualification.completion}</td>
+                  <td>{qualification.description}</td>
                   <td>
                     <button
                       className="btn btn-secondary mr-2"
                       onClick={() =>
-                        navigate(`/contact-details/${contact._id}`)
+                        navigate(`/qualification-details/${qualification._id}`)
                       }
                     >
                       Update
                     </button>
                     <button
                       className="btn btn-danger"
-                      onClick={() => handleDelete(contact._id)}
+                      onClick={() => handleDelete(qualification._id)}
                     >
                       Delete
                     </button>
@@ -113,11 +121,11 @@ const ContactList = () => {
         </>
       ) : (
         <>
-          <p className="text-center">No contacts available</p>
+          <p className="text-center">No qualifications available</p>
         </>
       )}
     </div>
   );
 };
 
-export default ContactList;
+export default QualificationList;

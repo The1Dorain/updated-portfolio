@@ -10,8 +10,9 @@ import Login from "./components/login.jsx";
 import ProjectList from "./components/project-list.jsx";
 import ProjectDetails from "./components/project-details.jsx";
 import ContactDetails from "./components/contact-details.jsx";
-import Contacts from "./components/contact-list.jsx";
 import ContactList from "./components/contact-list.jsx";
+import QualificationDetails from "./components/qualification-details.jsx";
+import QualificationList from "./components/qualification-list.jsx";
 
 function App() {
   const getUserFromStorage = () => {
@@ -64,8 +65,13 @@ function App() {
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/contact">
+                  <Link className="nav-link" to="/contacts">
                     Contact
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/qualifications">
+                    Qualifications
                   </Link>
                 </li>
               </ul>
@@ -105,8 +111,13 @@ function App() {
           <Route path="/login" element={<Login setUser={setUser} />} />
           <Route path="/projects" element={<ProjectList />} />
           <Route path="/project-details/:id?" element={<ProjectDetails />} />
-          <Route path="/contact" element={<ContactList />} />
-          <Route path="/contact-details/:id" element={<ContactDetails />} />
+          <Route path="/contacts" element={<ContactList />} />
+          <Route path="/contact-details/:id?" element={<ContactDetails />} />
+          <Route path="/qualifications" element={<QualificationList />} />
+          <Route
+            path="/qualification-details/:id?"
+            element={<QualificationDetails />}
+          />
         </Routes>
       </Router>
     </>

@@ -1,53 +1,95 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 const ContactDetails = () => {
-  const [form, setForm] = useState({
+  const [contact, setContact] = useState({
     email: "",
     phone: "",
     message: "",
   });
 
-  const [error, setError] = useState("");
+  const { id } = useParams();
+  const apiUrl = "/api";
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (id) {
+      const fetchContact = async () => {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+          navigate("/login");
+          return;
+        }
+
+        try {
+          const response = await fetch(`${apiUrl}/contacts/${id}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          if (!response.ok) {
+            throw new Error("Failed to fetch contact");
+          }
+
+          const data = await response.json();
+          setContact({
+            email: data.email,
+            phone: data.phone,
+            message: data.message,
+          });
+        } catch (error) {
+          console.error("Error fetching contact", error);
+        }
+      };
+
+      fetchContact();
+    }
+  }, [id, apiUrl]);
+
   const handleChange = (e) => {
-    e.preventDefault();
     const { name, value } = e.target;
-    setForm({ ...form, [name]: value });
+    setContact((prevState) => ({ ...prevState, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
+    const method = id ? "PUT" : "POST";
+    const url = id ? `${apiUrl}/contacts/${id}` : `${apiUrl}/contacts`;
+
     try {
-      const response = await fetch("/api/contacts", {
-        method: "POST",
+      const response = await fetch(url, {
+        method: method,
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(form),
+        body: JSON.stringify(contact),
       });
 
       if (!response.ok) {
-        throw new Error("Failed to create contact");
+        throw new Error("Failed to save contact");
       }
 
-      const data = await response.json();
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("username", data.user.username);
-      if (setUser) {
-        setUser({ username: data.user.username });
-      }
-      navigate("/");
+      navigate("/contacts");
     } catch (error) {
-      setError(error.message);
+      console.error("Error saving contact", error);
     }
   };
 
   return (
     <div className="container mt-4">
-      <h1 className="text-center">Contact Us</h1>
-      {error && <div className="alert alert-danger">{error}</div>}
+      <h1 className="text-center">
+        {id ? "Update Contact" : " Create Contact"}
+      </h1>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="email">Email</label>
@@ -55,21 +97,21 @@ const ContactDetails = () => {
             type="text"
             id="email"
             name="email"
-            value={form.email}
-            onChange={handleChange}
+            value={contact.email}
             className="form-control"
+            onChange={handleChange}
             required
           />
         </div>
         <div className="form-group">
-          <label htmlFor="phone">Phone #</label>
+          <label htmlFor="phone">Phone</label>
           <input
             type="text"
             id="phone"
             name="phone"
-            value={form.phone}
-            onChange={handleChange}
+            value={contact.phone}
             className="form-control"
+            onChange={handleChange}
             required
           />
         </div>
@@ -79,14 +121,14 @@ const ContactDetails = () => {
             type="text"
             id="message"
             name="message"
-            value={form.message}
-            onChange={handleChange}
+            value={contact.message}
             className="form-control"
+            onChange={handleChange}
             required
           />
         </div>
         <button type="submit" className="btn btn-primary">
-          Submit
+          {id ? "Update" : "Create"}
         </button>
       </form>
     </div>

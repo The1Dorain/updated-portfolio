@@ -23,6 +23,7 @@ connection.once("open", () => {
 import projectRoutes from "./routes/project.js";
 import userRoutes from "./routes/user.js";
 import contactRoutes from "./routes/contact.js";
+import qualificationRoutes from "./routes/qualification.js";
 
 const app = express();
 
@@ -35,6 +36,7 @@ app.use(morgan("dev"));
 app.use("/api/projects", projectRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/contacts", contactRoutes);
+app.use("/api/qualifications", qualificationRoutes);
 
 app.use("/api/data", (req, res) => {
   res.json({ message: "Hello from the API! Again" });
